@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="Try the After app — order coffee, matcha and protein shakes before you reach the tap." />
+<title>After App — Interactive Demo</title>
+<link rel="icon" type="image/png" href="assets/logo-after.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f4f2ee;
+    --ink:#0a0a0a;
+    --line:#e5e3df;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; overflow:hidden; }
+  body{
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .apppage{
+    display:flex; flex-direction:column;
+    height:100%; height:100dvh;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .apppage__bar{
+    flex:0 0 auto;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 16px;
+    border-bottom:1px solid var(--line);
+    background:rgba(244,242,238,.94);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .apppage__back{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.82rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink); text-decoration:none; padding:8px 0;
+  }
+  .apppage__back svg{ width:16px; height:16px; }
+  .apppage__logo{ height:22px; width:auto; }
+  .apppage__label{
+    font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+    color:#6f6f6f;
+  }
+  .apppage__frame{
+    flex:1 1 auto; min-height:0; position:relative;
+    background:#000;
+  }
+  .apppage__frame iframe{
+    position:absolute; inset:0; width:100%; height:100%;
+    border:0; display:block;
+  }
+</style>
+</head>
+<body>
+<div class="apppage">
+  <header class="apppage__bar">
+    <a href="index.html" class="apppage__back" aria-label="Back to After website">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    </a>
+    <img src="assets/logo-after.png" alt="After" class="apppage__logo" />
+    <span class="apppage__label">Live demo</span>
+  </header>
+  <main class="apppage__frame">
+    <iframe src="after-mvp.html" title="After app — interactive demo" allow="clipboard-read; clipboard-write"></iframe>
+  </main>
+</div>
+</body>
+</html>
