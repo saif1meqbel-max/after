@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#0f140d" />
+<title>after</title>
+<style>
+  :root{
+    --matcha:#5f8d3b;
+    --matcha-deep:#3f6b22;
+    --matcha-soft:#e9f0df;
+    --coffee:#7a5236;
+    --coffee-soft:#efe5dc;
+    --protein:#b06f8e;
+    --protein-soft:#f4e6ee;
+    --ink:#161a12;
+    --ink-2:#5b6151;
+    --ink-3:#9aa093;
+    --cream:#f6f4ee;
+    --card:#ffffff;
+    --line:#ece9e0;
+    --shadow:0 18px 50px rgba(30,40,20,.10);
+    --shadow-soft:0 8px 24px rgba(30,40,20,.06);
+    --radius:26px;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#0e110b;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+    overflow:hidden;
+  }
+  /* Desktop: show a phone frame on a soft stage */
+  .stage{
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #1d2516 0%, #0e110b 60%);
+  }
+  .phone{
+    position:relative;
+    width:390px;height:844px;
+    background:var(--cream);
+    border-radius:54px;
+    box-shadow:0 0 0 12px #11140d, 0 0 0 14px #2a2f22, 0 40px 90px rgba(0,0,0,.55);
+    overflow:hidden;
+  }
+  .notch{
+    position:absolute;top:11px;left:50%;transform:translateX(-50%);
+    width:122px;height:34px;background:#0a0c07;border-radius:20px;z-index:60;
+  }
+  @media (max-width:430px){
+    body{background:var(--cream)}
+    .stage{background:none}
+    .phone{width:100vw;height:100vh;border-radius:0;box-shadow:none}
+    .notch{display:none}
+  }
+
+  .app{position:absolute;inset:0;display:flex;flex-direction:column}
+
+  /* status bar */
+  .statusbar{
+    height:54px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 30px 6px;font-size:15px;font-weight:600;color:var(--ink);z-index:50;
+  }
+  .statusbar .right{display:flex;gap:7px;align-items:center}
+  .statusbar svg{display:block}
+
+  /* screens */
+  .screens{position:relative;flex:1;overflow:hidden}
+  .screen{
+    position:absolute;inset:0;overflow-y:auto;
+    padding:6px 22px 120px;
+    opacity:0;transform:translateX(24px);pointer-events:none;
+    transition:opacity .34s ease, transform .34s cubic-bezier(.22,.9,.3,1);
+    -webkit-overflow-scrolling:touch;
+  }
+  .screen.active{opacity:1;transform:none;pointer-events:auto}
+  .screen.back{transform:translateX(-24px)}
+  .screen::-webkit-scrollbar{display:none}
+
+  .brand{font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+  .wordmark{
+    font-size:23px;font-weight:800;letter-spacing:-.05em;color:var(--ink);
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .wordmark .dot{width:8px;height:8px;border-radius:50%;background:var(--matcha);margin-bottom:-2px}
+
+  /* ===== HOME ===== */
+  .home-top{display:flex;align-items:center;justify-content:space-between;padding:8px 2px 2px}
+  .avatar{
+    width:40px;height:40px;border-radius:50%;background:var(--matcha-soft);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--matcha-deep);
+    border:1px solid var(--line);
+  }
+  .greeting{margin:26px 2px 4px}
+  .greeting .small{font-size:15px;color:var(--ink-3);font-weight:600}
+  .greeting h1{font-size:33px;line-height:1.08;letter-spacing:-.03em;font-weight:800;margin-top:6px}
+  .section-label{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink-3);text-transform:uppercase;margin:30px 2px 14px}
+
+  .drinks{display:flex;flex-direction:column;gap:14px}
+  .drink{
+    position:relative;display:flex;align-items:center;gap:16px;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;box-shadow:var(--shadow-soft);cursor:pointer;
+    transition:transform .15s ease, box-shadow .2s ease;
+    overflow:hidden;
+  }
+  .drink:active{transform:scale(.985)}
+  .drink .glass{
+    width:64px;height:64px;flex:none;border-radius:20px;display:flex;align-items:center;justify-content:center;
+  }
+  .drink-m .glass{background:var(--matcha-soft)}
+  .drink-c .glass{background:var(--coffee-soft)}
+  .drink-p .glass{background:var(--protein-soft)}
+  .drink .info{flex:1;min-width:0}
+  .drink .info h3{font-size:18px;font-weight:700;letter-spacing:-.02em}
+  .drink .info p{font-size:13.5px;color:var(--ink-3);margin-top:3px;font-weight:500}
+  .drink .price{font-size:17px;font-weight:700;color:var(--ink)}
+  .drink .chev{color:var(--ink-3);flex:none}
+  .tag{
+    position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--matcha-deep);background:var(--matcha-soft);
+    padding:4px 9px;border-radius:20px;
+  }
+
+  .member-banner{
+    margin-top:18px;border-radius:var(--radius);padding:18px 20px;color:#eef3e6;
+    background:linear-gradient(135deg,#3f6b22,#27431a);
+    display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);cursor:pointer;
+  }
+  .member-banner .mb-l h4{font-size:15px;font-weight:700}
+  .member-banner .mb-l p{font-size:12.5px;opacity:.75;margin-top:3px}
+  .member-banner .mb-pill{background:rgba(255,255,255,.16);padding:8px 14px;border-radius:30px;font-size:13px;font-weight:700}
+
+  /* ===== PRODUCT ===== */
+  .navbar{display:flex;align-items:center;gap:14px;padding:8px 0 2px}
+  .iconbtn{
+    width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;color:var(--ink);
+    transition:transform .12s ease;
+  }
+  .iconbtn:active{transform:scale(.92)}
+  .hero{
+    margin-top:14px;border-radius:32px;height:300px;display:flex;align-items:flex-end;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .hero-m{background:radial-gradient(120% 90% at 50% 10%,#a6d27a,#5f8d3b)}
+  .hero-c{background:radial-gradient(120% 90% at 50% 10%,#b98a64,#7a5236)}
+  .hero-p{background:radial-gradient(120% 90% at 50% 10%,#d8a6c1,#b06f8e)}
+  .hero .cup{filter:drop-shadow(0 18px 24px rgba(0,0,0,.18))}
+  .hero .float-tag{
+    position:absolute;top:18px;left:18px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);
+    padding:7px 13px;border-radius:30px;font-size:12px;font-weight:700;color:var(--ink);
+    display:flex;align-items:center;gap:6px;
+  }
+  .p-title{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-top:24px}
+  .p-sub{font-size:15px;color:var(--ink-2);margin-top:8px;line-height:1.5;font-weight:500}
+  .specs{display:flex;gap:10px;margin-top:20px}
+  .spec{flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:center}
+  .spec .v{font-size:18px;font-weight:800}
+  .spec .k{font-size:11.5px;color:var(--ink-3);font-weight:600;margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
+
+  /* sticky pay bar */
+  .paybar{
+    position:absolute;left:0;right:0;bottom:0;padding:16px 22px 30px;
+    background:linear-gradient(180deg,rgba(246,244,238,0),var(--cream) 30%);
+    display:flex;align-items:center;gap:14px;z-index:30;
+  }
+  .price-block{flex:none}
+  .price-block .pk{font-size:11.5px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  .price-block .pv{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .btn{
+    flex:1;height:58px;border-radius:30px;border:none;background:var(--ink);color:#fff;
+    font-size:17px;font-weight:700;letter-spacing:-.01em;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:transform .12s ease, opacity .2s;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn.green{background:var(--matcha-deep)}
+  .btn-block{width:100%;flex:none}
+
+  /* ===== APPLE PAY SHEET ===== */
+  .sheet-scrim{
+    position:absolute;inset:0;background:rgba(10,12,7,.45);opacity:0;pointer-events:none;
+    transition:opacity .3s ease;z-index:80;backdrop-filter:blur(2px);
+  }
+  .sheet-scrim.show{opacity:1;pointer-events:auto}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:0;background:#f2f2f5;color:#000;
+    border-radius:14px 14px 0 0;padding:14px 18px 30px;transform:translateY(102%);
+    transition:transform .42s cubic-bezier(.22,.9,.3,1);z-index:81;
+  }
+  .sheet.show{transform:none}
+  .sheet .grab{width:38px;height:5px;border-radius:3px;background:#c9c9cf;margin:0 auto 12px}
+  .ap-head{display:flex;align-items:center;gap:8px;font-size:21px;font-weight:600;justify-content:center;margin-bottom:14px}
+  .ap-card{background:#fff;border-radius:14px;overflow:hidden}
+  .ap-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #ededf0}
+  .ap-row:last-child{border-bottom:none}
+  .ap-row .l{display:flex;align-items:center;gap:12px}
+  .ap-row .label{font-size:12px;color:#8a8a8e}
+  .ap-row .main{font-size:15px;font-weight:600}
+  .ap-row .sub{font-size:12px;color:#8a8a8e;margin-top:1px}
+  .ap-cardicon{width:34px;height:22px;border-radius:4px;background:linear-gradient(135deg,#2b2b2e,#4a4a50)}
+  .ap-total{padding:16px;display:flex;justify-content:space-between;align-items:center}
+  .ap-total .tl{font-size:16px;font-weight:600}
+  .ap-total .tr{font-size:20px;font-weight:700}
+  .ap-pay{
+    margin-top:14px;height:54px;border-radius:12px;background:#000;color:#fff;border:none;width:100%;
+    font-size:19px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  }
+  .ap-pay:active{opacity:.85}
+  .ap-hint{text-align:center;font-size:12px;color:#8a8a8e;margin-top:12px}
+  .ap-processing{display:none;flex-direction:column;align-items:center;gap:14px;padding:30px 0 10px}
+  .ap-processing.show{display:flex}
+  .spinner{width:42px;height:42px;border-radius:50%;border:3px solid #d7d7db;border-top-color:#000;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== SUCCESS / QR ===== */
+  #screen-success{padding-top:0}
+  .success-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:26px}
+  .check{
+    width:74px;height:74px;border-radius:50%;background:var(--matcha-soft);display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;animation:pop .5s cubic-bezier(.2,1.3,.4,1);
+  }
+  @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  .success-wrap h2{font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .success-wrap .ssub{font-size:15px;color:var(--ink-2);margin-top:8px;line-height:1.5;max-width:280px;font-weight:500}
+  .qr-card{
+    margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:26px;
+    box-shadow:var(--shadow);width:100%;
+  }
+  .qr-card canvas{width:200px;height:200px;display:block;margin:0 auto;border-radius:12px}
+  .qr-meta{margin-top:20px;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+  .qr-meta .qk{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.03em;font-weight:600}
+  .qr-meta .qv{font-size:15px;font-weight:700;margin-top:3px}
+  .countdown{margin-top:18px;font-size:13.5px;color:var(--ink-3);font-weight:600}
+  .countdown b{color:var(--matcha-deep)}
+
+  /* ===== MEMBERSHIP ===== */
+  .mcard{
+    border-radius:28px;padding:24px;color:#eef3e6;position:relative;overflow:hidden;
+    background:linear-gradient(140deg,#4a7c2f,#2a481b);box-shadow:var(--shadow);margin-top:10px;
+  }
+  .mcard::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+    background:rgba(255,255,255,.07);top:-90px;right:-60px}
+  .mcard .mc-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .mcard .mc-plan{font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.7;font-weight:700}
+  .mcard .mc-name{font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+  .mcard .mc-word{font-size:18px;font-weight:800;letter-spacing:-.04em;opacity:.9}
+  .mcard .mc-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:38px}
+  .mcard .mc-k{font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .mcard .mc-v{font-size:15px;font-weight:700;margin-top:3px}
+
+  .stat-row{display:flex;gap:12px;margin-top:16px}
+  .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;text-align:center}
+  .stat .sv{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .stat .sk{font-size:12px;color:var(--ink-3);font-weight:600;margin-top:4px}
+
+  .perks{margin-top:10px}
+  .perk{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:15px 16px;margin-bottom:10px}
+  .perk .pi{width:38px;height:38px;border-radius:12px;background:var(--matcha-soft);display:flex;align-items:center;justify-content:center;flex:none}
+  .perk .pt{font-size:15px;font-weight:700}
+  .perk .pd{font-size:12.5px;color:var(--ink-3);margin-top:2px;font-weight:500}
+
+  .plan-toggle{display:flex;background:var(--matcha-soft);border-radius:30px;padding:5px;margin:20px 0 6px}
+  .plan-toggle button{flex:1;border:none;background:none;padding:11px;border-radius:24px;font-size:14px;font-weight:700;color:var(--matcha-deep);cursor:pointer;position:relative;transition:color .2s}
+  .plan-toggle button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow-soft)}
+  .save-pill{font-size:10px;background:var(--matcha-deep);color:#fff;padding:2px 7px;border-radius:20px;margin-left:6px;font-weight:800;vertical-align:middle}
+
+  /* ===== POINTS PILL ===== */
+  .points-pill{display:flex;align-items:center;gap:5px;background:var(--matcha-soft);color:var(--matcha-deep);
+    padding:7px 12px;border-radius:30px;font-size:13.5px;font-weight:800;cursor:pointer;border:1px solid #dbe7cb}
+  .points-pill .star{display:flex}
+
+  /* ===== SEASONAL FEATURE CARD ===== */
+  .seasonal{position:relative;border-radius:var(--radius);padding:20px;padding-top:56px;color:#fff;overflow:hidden;
+    box-shadow:var(--shadow);cursor:pointer;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;
+    transition:transform .15s ease;background:#5f8d3b}
+  .seasonal:active{transform:scale(.985)}
+  .seasonal .s-badge{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.22);backdrop-filter:blur(4px);
+    padding:6px 12px;border-radius:30px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px;z-index:3}
+  .seasonal .s-cup{position:absolute;bottom:-22px;right:-4px;opacity:.96;z-index:1;
+    filter:drop-shadow(0 12px 18px rgba(0,0,0,.22))}
+  .seasonal h3{font-size:23px;font-weight:800;letter-spacing:-.03em;position:relative;z-index:2}
+  .seasonal p{font-size:13.5px;opacity:.92;margin-top:4px;font-weight:500;max-width:215px;position:relative;z-index:2;line-height:1.4}
+  .seasonal .s-foot{display:flex;align-items:center;gap:12px;margin-top:15px;position:relative;z-index:2}
+  .seasonal .s-price{font-size:19px;font-weight:800}
+  .seasonal .s-cta{background:#fff;color:var(--ink);font-size:13px;font-weight:800;padding:9px 16px;border-radius:30px}
+
+  /* ===== REWARDS ===== */
+  .balance-card{border-radius:28px;padding:24px;color:#fff;position:relative;overflow:hidden;margin-top:10px;
+    background:linear-gradient(140deg,#5f8d3b,#2e4a1a);box-shadow:var(--shadow)}
+  .balance-card::after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;
+    background:rgba(255,255,255,.07);top:-80px;right:-50px}
+  .balance-card .bl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.7;font-weight:700}
+  .balance-card .bv{font-size:44px;font-weight:800;letter-spacing:-.03em;margin-top:2px;display:flex;align-items:baseline;gap:8px}
+  .balance-card .bv small{font-size:15px;font-weight:700;opacity:.7}
+  .balance-card .bprog{margin-top:18px;position:relative;z-index:2}
+  .balance-card .bbar{height:8px;background:rgba(255,255,255,.22);border-radius:8px;overflow:hidden}
+  .balance-card .bbar i{display:block;height:100%;background:#fff;border-radius:8px;transition:width .5s ease}
+  .balance-card .bnext{font-size:12.5px;opacity:.9;margin-top:9px;font-weight:600}
+
+  .reward{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:14px 16px;margin-bottom:10px}
+  .reward .ri{width:44px;height:44px;border-radius:14px;background:var(--matcha-soft);display:flex;align-items:center;justify-content:center;flex:none;font-size:22px}
+  .reward .rinfo{flex:1;min-width:0}
+  .reward .rt{font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .reward .rc{font-size:12.5px;color:var(--ink-3);margin-top:2px;font-weight:500}
+  .reward .rbtn{border:none;background:var(--matcha-deep);color:#fff;font-size:13px;font-weight:800;padding:10px 15px;border-radius:30px;cursor:pointer;flex:none}
+  .reward .rbtn:active{transform:scale(.95)}
+  .reward .rlock{font-size:13px;color:var(--ink-3);font-weight:800;flex:none}
+  .reward.locked{opacity:.6}
+  .reward.locked .ri{background:#efeee8;filter:grayscale(.7)}
+
+  .pts-earned{display:inline-flex;align-items:center;gap:6px;background:var(--matcha-soft);color:var(--matcha-deep);
+    font-size:14px;font-weight:800;padding:10px 16px;border-radius:30px;margin-top:18px}
+  .pts-earned svg{width:14px;height:14px}
+
+  .nonmember-note{background:var(--card);border:1px dashed #d8d4c7;border-radius:18px;padding:15px 16px;
+    font-size:13px;color:var(--ink-2);margin-top:14px;font-weight:500;line-height:1.55}
+  .nonmember-note b{color:var(--ink);display:inline-flex;align-items:center;gap:4px}
+  .nonmember-note b svg{width:13px;height:13px;color:var(--matcha-deep)}
+  .nonmember-note .link{color:var(--matcha-deep);font-weight:800;cursor:pointer}
+
+  /* ===== TOAST ===== */
+  .toast{position:absolute;left:50%;bottom:98px;transform:translateX(-50%) translateY(16px);
+    background:var(--ink);color:#fff;padding:13px 20px;border-radius:30px;font-size:13.5px;font-weight:700;
+    opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:90;max-width:84%;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ===== TAB BAR ===== */
+  .tabbar{
+    position:absolute;left:14px;right:14px;bottom:14px;height:68px;background:rgba(255,255,255,.86);
+    backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:30px;display:flex;
+    box-shadow:var(--shadow);z-index:40;
+  }
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink-3);font-size:11px;font-weight:700}
+  .tab.on{color:var(--matcha-deep)}
+  .tab svg{display:block}
+  .hidebar .tabbar{transform:translateY(120px);transition:transform .3s}
+
+  .home-indicator{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.22);z-index:70}
+  @media (max-width:430px){.home-indicator{display:none}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="app" id="app">
+      <!-- status bar -->
+      <div class="statusbar">
+        <div class="time">9:41</div>
+        <div class="right">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="1" fill="#161a12"/><rect x="5" y="4" width="3" height="8" rx="1" fill="#161a12"/><rect x="10" y="2" width="3" height="10" rx="1" fill="#161a12"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#161a12"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 2.5c2.3 0 4.4.9 6 2.3l-1.4 1.5A6.6 6.6 0 0 0 8.5 4.5 6.6 6.6 0 0 0 3.9 6.3L2.5 4.8A8.9 8.9 0 0 1 8.5 2.5Z" fill="#161a12"/><path d="M8.5 6.4c1.2 0 2.3.5 3.1 1.3L8.5 11 5.4 7.7A4.4 4.4 0 0 1 8.5 6.4Z" fill="#161a12"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="#161a12" opacity=".4"/><rect x="3" y="3" width="16" height="7" rx="1.5" fill="#161a12"/><rect x="23" y="4.5" width="2" height="4" rx="1" fill="#161a12" opacity=".5"/></svg>
+        </div>
+      </div>
+
+      <div class="screens" id="screens">
+
+        <!-- ============ HOME ============ -->
+        <section class="screen active" id="screen-home" data-tab="order">
+          <div class="home-top">
+            <span class="wordmark">after<span class="dot"></span></span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="points-pill" onclick="go('rewards')"><span class="star">$STAR$</span><span id="home-points">1,250</span></div>
+              <div class="avatar">F</div>
+            </div>
+          </div>
+
+          <div class="greeting">
+            <div class="small">good morning, feyzagul</div>
+            <h1>how can we<br>help you today?</h1>
+          </div>
+
+          <div class="section-label" id="seasonal-label">limited time</div>
+          <div class="seasonal" id="seasonal-card" onclick="openProduct('seasonal')"></div>
+
+          <div class="section-label">on tap now</div>
+          <div class="drinks">
+            <div class="drink drink-m" onclick="openProduct('matcha')">
+              <span class="tag">most loved</span>
+              <div class="glass">$ICON_MATCHA$</div>
+              <div class="info">
+                <h3>Matcha Latte</h3>
+                <p>Ceremonial grade · oat milk</p>
+              </div>
+              <div class="price">£3.50</div>
+              <div class="chev">$CHEV$</div>
+            </div>
+
+            <div class="drink drink-c" onclick="openProduct('coffee')">
+              <div class="glass">$ICON_COFFEE$</div>
+              <div class="info">
+                <h3>Iced Coffee</h3>
+                <p>Single origin · cold brew</p>
+              </div>
+              <div class="price">£3.00</div>
+              <div class="chev">$CHEV$</div>
+            </div>
+
+            <div class="drink drink-p" onclick="openProduct('protein')">
+              <div class="glass">$ICON_PROTEIN$</div>
+              <div class="info">
+                <h3>Protein Shake</h3>
+                <p>25g protein · vanilla</p>
+              </div>
+              <div class="price">£4.00</div>
+              <div class="chev">$CHEV$</div>
+            </div>
+          </div>
+
+          <div class="member-banner" onclick="go('membership','order')">
+            <div class="mb-l">
+              <h4>after unlimited</h4>
+              <p>every tap, every day · from £25/mo</p>
+            </div>
+            <div class="mb-pill">Join</div>
+          </div>
+        </section>
+
+        <!-- ============ PRODUCT ============ -->
+        <section class="screen" id="screen-product">
+          <div class="navbar">
+            <div class="iconbtn" onclick="go('home')">$BACK$</div>
+          </div>
+          <div class="hero" id="p-hero">
+            <div class="float-tag"><span id="p-tagdot" style="width:7px;height:7px;border-radius:50%;background:var(--matcha)"></span><span id="p-tagtext">ready in 8s</span></div>
+            <div class="cup" id="p-cup"></div>
+          </div>
+          <h1 class="p-title" id="p-title">Matcha Latte</h1>
+          <p class="p-sub" id="p-sub"></p>
+          <div class="specs">
+            <div class="spec"><div class="v" id="p-s1v">80mg</div><div class="k">caffeine</div></div>
+            <div class="spec"><div class="v" id="p-s2v">120</div><div class="k">calories</div></div>
+            <div class="spec"><div class="v" id="p-s3v">8s</div><div class="k">to pour</div></div>
+          </div>
+
+          <div class="paybar">
+            <div class="price-block">
+              <div class="pk">total</div>
+              <div class="pv" id="p-price">£3.50</div>
+            </div>
+            <button class="btn" onclick="openPay()">
+              $APPLE$ Pay
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ SUCCESS / QR ============ -->
+        <section class="screen" id="screen-success">
+          <div class="success-wrap">
+            <div class="check">$CHECK$</div>
+            <h2>You're all set</h2>
+            <p class="ssub" id="s-sub">Scan this at any <b>after</b> tap to pour your matcha latte.</p>
+
+            <div class="qr-card">
+              <canvas id="qr" width="200" height="200"></canvas>
+              <div class="qr-meta">
+                <div><div class="qk">order</div><div class="qv" id="s-order">#A4F-2931</div></div>
+                <div style="text-align:right"><div class="qk">drink</div><div class="qv" id="s-drink">Matcha Latte</div></div>
+              </div>
+            </div>
+            <div class="pts-earned" id="s-points"></div>
+            <div class="countdown" id="s-count">Code expires in <b>5:00</b></div>
+            <button class="btn green btn-block" style="margin-top:24px" onclick="go('home')">Done</button>
+          </div>
+        </section>
+
+        <!-- ============ REWARDS ============ -->
+        <section class="screen" id="screen-rewards" data-tab="rewards">
+          <div class="greeting" style="margin-top:8px">
+            <div class="small">pay as you go</div>
+            <h1 style="font-size:30px">Rewards</h1>
+          </div>
+
+          <div class="balance-card">
+            <div class="bl">your points</div>
+            <div class="bv"><span id="rw-balance">1,250</span><small>pts</small></div>
+            <div class="bprog">
+              <div class="bbar"><i id="rw-bar" style="width:40%"></i></div>
+              <div class="bnext" id="rw-next"></div>
+            </div>
+          </div>
+
+          <div class="section-label">redeem your points</div>
+          <div id="rw-list"></div>
+
+          <div class="nonmember-note">
+            <b>$STAR$ 100 points</b> for every £1 you spend. Drinking a lot?
+            <span class="link" onclick="go('membership')">after unlimited</span> gives you every pour for one flat price.
+          </div>
+        </section>
+
+        <!-- ============ MEMBERSHIP ============ -->
+        <section class="screen" id="screen-membership" data-tab="membership">
+          <div class="greeting" style="margin-top:8px">
+            <div class="small">your plan</div>
+            <h1 style="font-size:30px">Membership</h1>
+          </div>
+
+          <div class="mcard">
+            <div class="mc-top">
+              <div>
+                <div class="mc-plan">after unlimited</div>
+                <div class="mc-name">Feyzagul Turker</div>
+              </div>
+              <div class="mc-word">after</div>
+            </div>
+            <div class="mc-bottom">
+              <div><div class="mc-k">member since</div><div class="mc-v">Jun 2026</div></div>
+              <div style="text-align:right"><div class="mc-k">status</div><div class="mc-v">Active</div></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat"><div class="sv">42</div><div class="sk">drinks this month</div></div>
+            <div class="stat"><div class="sv">£122</div><div class="sk">saved vs pay-as-you-go</div></div>
+          </div>
+
+          <div class="section-label">included with unlimited</div>
+          <div class="perks">
+            <div class="perk"><div class="pi">$P_CUP$</div><div><div class="pt">Unlimited pours</div><div class="pd">Matcha, coffee & protein — any tap</div></div></div>
+            <div class="perk"><div class="pi">$P_SKIP$</div><div><div class="pt">Skip the pay screen</div><div class="pd">One tap to a QR code, every time</div></div></div>
+            <div class="perk"><div class="pi">$P_GUEST$</div><div><div class="pt">Guest pours</div><div class="pd">2 free drinks for friends each month</div></div></div>
+          </div>
+
+          <div class="section-label">change plan</div>
+          <div class="plan-toggle">
+            <button class="on" id="plan-month" onclick="setPlan('month')">Monthly · £29</button>
+            <button id="plan-year" onclick="setPlan('year')">Yearly · £25<span class="save-pill">SAVE 14%</span></button>
+          </div>
+          <button class="btn green btn-block" style="margin-top:16px" id="plan-cta">Update to Monthly · £29/mo</button>
+        </section>
+
+      </div><!-- /screens -->
+
+      <!-- ===== APPLE PAY SHEET ===== -->
+      <div class="sheet-scrim" id="scrim" onclick="closePay()"></div>
+      <div class="sheet" id="sheet">
+        <div class="grab"></div>
+        <div class="ap-head">$APPLE_BIG$ Pay</div>
+        <div id="ap-form">
+          <div class="ap-card">
+            <div class="ap-row">
+              <div class="l">
+                <div class="ap-cardicon"></div>
+                <div><div class="main">after</div><div class="sub" id="ap-item">Matcha Latte</div></div>
+              </div>
+            </div>
+            <div class="ap-row">
+              <div class="l"><div><div class="label">PAY WITH</div><div class="main">•••• 4921</div></div></div>
+              <div style="color:#8a8a8e">$CHEV$</div>
+            </div>
+            <div class="ap-row">
+              <div class="l"><div><div class="label">PICK UP AT</div><div class="main">after — Studio Bar</div></div></div>
+              <div style="color:#8a8a8e">$CHEV$</div>
+            </div>
+            <div class="ap-total"><div class="tl">Total</div><div class="tr" id="ap-total">£3.50</div></div>
+          </div>
+          <button class="ap-pay" onclick="confirmPay()">$APPLE_BIG$ Pay</button>
+          <div class="ap-hint">Double-click side button to pay · Face ID</div>
+        </div>
+        <div class="ap-processing" id="ap-proc">
+          <div class="spinner"></div>
+          <div style="font-size:15px;font-weight:600">Processing payment…</div>
+        </div>
+      </div>
+
+      <!-- ===== TAB BAR ===== -->
+      <div class="tabbar" id="tabbar">
+        <div class="tab on" data-tab="order" onclick="go('home')">
+          $T_ORDER$<span>Order</span>
+        </div>
+        <div class="tab" data-tab="rewards" onclick="go('rewards')">
+          $T_REWARD$<span>Rewards</span>
+        </div>
+        <div class="tab" data-tab="membership" onclick="go('membership')">
+          $T_MEMBER$<span>Membership</span>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- icon set (inline SVG) ---------- */
+const I = {
+  chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  check:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#3f6b22" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  apple:'<svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.15-2.9.9-3.7.9-.8 0-1.9-.87-3.1-.85-1.6.02-3.1.93-3.9 2.37-1.7 2.9-.43 7.2 1.2 9.55.8 1.15 1.74 2.44 2.98 2.4 1.2-.05 1.65-.77 3.1-.77 1.43 0 1.84.77 3.1.75 1.28-.02 2.09-1.17 2.87-2.33.9-1.33 1.27-2.62 1.29-2.69-.03-.01-2.47-.95-2.49-3.76zM14 4.9c.66-.8 1.1-1.9.98-3-.95.04-2.1.63-2.78 1.42-.6.7-1.13 1.83-.99 2.9 1.06.08 2.13-.54 2.79-1.32z"/></svg>',
+  appleBig:'<svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.15-2.9.9-3.7.9-.8 0-1.9-.87-3.1-.85-1.6.02-3.1.93-3.9 2.37-1.7 2.9-.43 7.2 1.2 9.55.8 1.15 1.74 2.44 2.98 2.4 1.2-.05 1.65-.77 3.1-.77 1.43 0 1.84.77 3.1.75 1.28-.02 2.09-1.17 2.87-2.33.9-1.33 1.27-2.62 1.29-2.69-.03-.01-2.47-.95-2.49-3.76zM14 4.9c.66-.8 1.1-1.9.98-3-.95.04-2.1.63-2.78 1.42-.6.7-1.13 1.83-.99 2.9 1.06.08 2.13-.54 2.79-1.32z"/></svg>',
+  tOrder:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 8z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+  tMember:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="3" stroke="currentColor" stroke-width="1.9"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.9"/><path d="M7 15h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+  tReward:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="9" width="17" height="11" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M3.5 13h17M12 9v11" stroke="currentColor" stroke-width="1.9"/><path d="M12 9S10.6 4.6 8.2 5c-2.1.35-1.6 4 3.8 4zM12 9s1.4-4.4 3.8-4c2.1.35 1.6 4-3.8 4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  star:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2z"/></svg>',
+  // drink glass icons
+  matcha:'<svg width="34" height="34" viewBox="0 0 32 32" fill="none"><path d="M8 9h16l-1.5 16a2 2 0 0 1-2 1.8H11.5a2 2 0 0 1-2-1.8L8 9z" fill="#5f8d3b"/><path d="M8 9h16l-.4 4.5H8.4L8 9z" fill="#79a653"/><ellipse cx="16" cy="9" rx="8" ry="1.8" fill="#9cc472"/></svg>',
+  coffee:'<svg width="34" height="34" viewBox="0 0 32 32" fill="none"><path d="M8 9h16l-1.5 16a2 2 0 0 1-2 1.8H11.5a2 2 0 0 1-2-1.8L8 9z" fill="#7a5236"/><rect x="9" y="12" width="14" height="2.5" fill="#9a6f4d" opacity=".6"/><ellipse cx="16" cy="9" rx="8" ry="1.8" fill="#a07a57"/></svg>',
+  protein:'<svg width="34" height="34" viewBox="0 0 32 32" fill="none"><path d="M9 11h14l-1 13a2 2 0 0 1-2 1.8h-8a2 2 0 0 1-2-1.8l-1-13z" fill="#b06f8e"/><path d="M10 6h12l-.5 4h-11L10 6z" fill="#c98fac"/><rect x="11" y="4" width="10" height="2.5" rx="1.2" fill="#d8a6c1"/></svg>',
+  // big cups for hero
+  cupBig:(c1,c2,foam)=>'<svg width="150" height="200" viewBox="0 0 150 200" fill="none"><defs><linearGradient id="g'+c1.slice(1)+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c2+'"/><stop offset="1" stop-color="'+c1+'"/></linearGradient></defs><path d="M30 60h90l-9 118a10 10 0 0 1-10 9.2H49a10 10 0 0 1-10-9.2L30 60z" fill="url(#g'+c1.slice(1)+')"/><path d="M30 60h90l-2 26H32L30 60z" fill="'+foam+'"/><ellipse cx="75" cy="60" rx="45" ry="9" fill="'+foam+'"/><ellipse cx="75" cy="58" rx="45" ry="8" fill="#ffffff" opacity=".5"/><rect x="44" y="100" width="10" height="60" rx="5" fill="#ffffff" opacity=".18"/></svg>',
+  pCup:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 8h10l-1 12a1.5 1.5 0 0 1-1.5 1.4H9.5A1.5 1.5 0 0 1 8 20L7 8z" stroke="#3f6b22" stroke-width="1.8" stroke-linejoin="round"/><ellipse cx="12" cy="8" rx="5" ry="1.2" fill="#3f6b22"/></svg>',
+  pSkip:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#3f6b22"/></svg>',
+  pGuest:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.4" stroke="#3f6b22" stroke-width="1.8"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0" stroke="#3f6b22" stroke-width="1.8" stroke-linecap="round"/><path d="M17 8v6M14 11h6" stroke="#3f6b22" stroke-width="1.8" stroke-linecap="round"/></svg>',
+};
+
+/* inject icons into placeholders */
+function inject(){
+  const map={
+    '$CHEV$':I.chev,'$BACK$':I.back,'$CHECK$':I.check,'$APPLE$':I.apple,'$APPLE_BIG$':I.appleBig,
+    '$T_ORDER$':I.tOrder,'$T_MEMBER$':I.tMember,'$T_REWARD$':I.tReward,'$STAR$':I.star,
+    '$ICON_MATCHA$':I.matcha,'$ICON_COFFEE$':I.coffee,
+    '$ICON_PROTEIN$':I.protein,'$P_CUP$':I.pCup,'$P_SKIP$':I.pSkip,'$P_GUEST$':I.pGuest
+  };
+  let html=document.getElementById('app').innerHTML;
+  for(const k in map){ html=html.split(k).join(map[k]); }
+  document.getElementById('app').innerHTML=html;
+}
+inject();
+
+/* ---------- product data ---------- */
+const DRINKS={
+  matcha:{name:'Matcha Latte',price:'£3.50',
+    sub:'Stone-ground ceremonial matcha, whisked smooth and poured over chilled oat milk. Earthy, sweet, clean energy.',
+    caf:'80mg',cal:'120',pour:'8s',hero:'hero-m',tag:'ready in 8s',tagc:'var(--matcha)',
+    cup:I.cupBig('#5f8d3b','#86b85a','#cfe6b0')},
+  coffee:{name:'Iced Coffee',price:'£3.00',
+    sub:'Single-origin beans, slow cold-brewed for 16 hours. Bright, smooth and never bitter, over ice.',
+    caf:'120mg',cal:'15',pour:'6s',hero:'hero-c',tag:'ready in 6s',tagc:'var(--coffee)',
+    cup:I.cupBig('#7a5236','#a07a57','#d8c4b2')},
+  protein:{name:'Protein Shake',price:'£4.00',
+    sub:'25g of whey isolate blended with real vanilla and oat milk. Thick, creamy and macro-friendly.',
+    caf:'0mg',cal:'210',pour:'10s',hero:'hero-p',tag:'ready in 10s',tagc:'var(--protein)',
+    cup:I.cupBig('#b06f8e','#d29ab6','#f0d9e6')},
+};
+let current='matcha';
+
+/* ---------- navigation ---------- */
+const screens={home:'screen-home',product:'screen-product',success:'screen-success',rewards:'screen-rewards',membership:'screen-membership'};
+const tabFor={home:'order',rewards:'rewards',membership:'membership'};
+function go(name){
+  const targetId=screens[name];
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.classList.toggle('back', s.id!==targetId);
+  });
+  const t=document.getElementById(targetId);
+  t.classList.remove('back'); t.classList.add('active'); t.scrollTop=0;
+  // tab bar visibility + active state
+  const showTab=name in tabFor;
+  document.getElementById('app').classList.toggle('hidebar', !showTab);
+  if(showTab) document.querySelectorAll('.tab').forEach(tb=>tb.classList.toggle('on', tb.dataset.tab===tabFor[name]));
+}
+
+function openProduct(key){
+  current=key; const d=DRINKS[key];
+  document.getElementById('p-title').textContent=d.name;
+  document.getElementById('p-sub').textContent=d.sub;
+  document.getElementById('p-price').textContent=d.price;
+  document.getElementById('p-s1v').textContent=d.caf;
+  document.getElementById('p-s2v').textContent=d.cal;
+  document.getElementById('p-s3v').textContent=d.pour;
+  document.getElementById('p-tagtext').textContent=d.tag;
+  document.getElementById('p-tagdot').style.background=d.tagc;
+  const hero=document.getElementById('p-hero');
+  if(d.grad){ hero.className='hero'; hero.style.background='linear-gradient(150deg,'+d.grad[0]+','+d.grad[1]+')'; }
+  else { hero.className='hero '+d.hero; hero.style.background=''; }
+  document.getElementById('p-cup').innerHTML=d.cup;
+  document.getElementById('ap-item').textContent=d.name;
+  document.getElementById('ap-total').textContent=d.price;
+  go('product');
+}
+
+/* ---------- apple pay ---------- */
+function openPay(){
+  document.getElementById('ap-form').style.display='block';
+  document.getElementById('ap-proc').classList.remove('show');
+  document.getElementById('scrim').classList.add('show');
+  document.getElementById('sheet').classList.add('show');
+}
+function closePay(){
+  document.getElementById('scrim').classList.remove('show');
+  document.getElementById('sheet').classList.remove('show');
+}
+function confirmPay(){
+  document.getElementById('ap-form').style.display='none';
+  document.getElementById('ap-proc').classList.add('show');
+  setTimeout(()=>{
+    closePay();
+    const d=DRINKS[current];
+    document.getElementById('s-drink').textContent=d.name;
+    document.getElementById('s-sub').innerHTML='Scan this at any <b>after</b> tap to pour your '+d.name.toLowerCase()+'.';
+    document.getElementById('s-order').textContent='#'+rand();
+    // award loyalty points (100 pts per £1)
+    const earned=Math.round(parseFloat(d.price.replace('£',''))*100);
+    points+=earned; savePoints(); renderPoints();
+    document.getElementById('s-points').innerHTML=I.star+' +'+fmt(earned)+' points · balance '+fmt(points);
+    drawQR();
+    startCountdown();
+    go('success');
+  },1500);
+}
+function rand(){const c='ABCDEF0123456789';let s='';for(let i=0;i<3;i++)s+=c[Math.random()*16|0];s+='-';for(let i=0;i<4;i++)s+=c[Math.random()*16|0];return s;}
+
+/* ---------- fake-but-realistic QR ---------- */
+function drawQR(){
+  const cv=document.getElementById('qr');const ctx=cv.getContext('2d');
+  const N=29,cell=200/N;ctx.clearRect(0,0,200,200);ctx.fillStyle='#16261a';
+  // seeded random for stable pattern per draw
+  let seed=Date.now()%99991;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    if(inFinder(x,y,N))continue;
+    if(rnd()>0.5)ctx.fillRect(Math.round(x*cell),Math.round(y*cell),Math.ceil(cell),Math.ceil(cell));
+  }
+  finder(ctx,0,0,cell);finder(ctx,(N-7)*cell,0,cell);finder(ctx,0,(N-7)*cell,cell);
+}
+function inFinder(x,y,N){const f=(x<8&&y<8)||(x>=N-8&&y<8)||(x<8&&y>=N-8);return f;}
+function finder(ctx,px,py,cell){
+  ctx.fillStyle='#16261a';ctx.fillRect(px,py,cell*7,cell*7);
+  ctx.fillStyle='#fff';ctx.fillRect(px+cell,py+cell,cell*5,cell*5);
+  ctx.fillStyle='#16261a';ctx.fillRect(px+cell*2,py+cell*2,cell*3,cell*3);
+}
+
+/* ---------- countdown ---------- */
+let cdTimer=null;
+function startCountdown(){
+  clearInterval(cdTimer);let t=300;const el=document.getElementById('s-count');
+  const tick=()=>{const m=Math.floor(t/60),s=String(t%60).padStart(2,'0');
+    el.innerHTML='Code expires in <b>'+m+':'+s+'</b>';if(t<=0)clearInterval(cdTimer);t--;};
+  tick();cdTimer=setInterval(tick,1000);
+}
+
+/* ---------- membership plan ---------- */
+function setPlan(p){
+  document.getElementById('plan-month').classList.toggle('on',p==='month');
+  document.getElementById('plan-year').classList.toggle('on',p==='year');
+  document.getElementById('plan-cta').textContent=
+    p==='month'?'Update to Monthly · £29/mo':'Update to Yearly · £25/mo';
+}
+
+/* ---------- seasonal drinks (auto-changes by month) ---------- */
+const SEASONAL={
+ 0:{name:'Toasted Hojicha Latte',badge:'❄️ Winter warmer',price:'£3.90',sub:'Roasted hojicha, steamed oat & a touch of honey.',caf:'30mg',cal:'140',pour:'9s',grad:['#9a744c','#5a3f28'],cup:['#7a5638','#a07a52','#dcc6ac']},
+ 1:{name:'Rose Matcha',badge:'💗 Valentine\'s special',price:'£4.20',sub:'Ceremonial matcha kissed with rose & white chocolate.',caf:'80mg',cal:'160',pour:'8s',grad:['#d2587a','#8e2f4c'],cup:['#cf5b7c','#e58aa3','#f6d2dd']},
+ 2:{name:'Cherry Blossom Matcha',badge:'🌸 Spring bloom',price:'£4.20',sub:'Sakura-infused matcha poured over chilled oat milk.',caf:'80mg',cal:'150',pour:'8s',grad:['#e07fa6','#a8517a'],cup:['#e283a8','#efa9c2','#fbdde9']},
+ 3:{name:'Easter Strawberries & Cream',badge:'🐣 Easter special',price:'£4.20',sub:'Strawberries & cream matcha — spring in a glass.',caf:'80mg',cal:'180',pour:'9s',grad:['#e2719a','#b14d72'],cup:['#e2719a','#f0a0bd','#ffd6e4']},
+ 4:{name:'Elderflower Matcha',badge:'🌼 May bloom',price:'£4.10',sub:'Floral elderflower & yuzu over iced matcha.',caf:'80mg',cal:'120',pour:'8s',grad:['#a7c24f','#6f8a2c'],cup:['#8fb33f','#b6d06a','#e3efbf']},
+ 5:{name:'Mango Matcha',badge:'🥭 Summer limited',price:'£4.20',sub:'Alphonso mango swirled through iced matcha.',caf:'80mg',cal:'170',pour:'8s',grad:['#f0a83a','#d97b1f'],cup:['#e8932f','#f4b65c','#ffe0a8']},
+ 6:{name:'Passionfruit Cooler',badge:'🌴 Summer limited',price:'£4.10',sub:'Tangy passionfruit & green tea over crushed ice.',caf:'60mg',cal:'110',pour:'7s',grad:['#f2b134','#e07d22'],cup:['#f0a92e','#f6c766','#ffe7ad']},
+ 7:{name:'White Peach Matcha',badge:'🍑 Late summer',price:'£4.10',sub:'Juicy white peach folded into iced matcha.',caf:'70mg',cal:'150',pour:'8s',grad:['#f0a07a','#d36f4d'],cup:['#f0a07a','#f6bfa3','#ffe3d4']},
+ 8:{name:'Honey Fig Latte',badge:'🍯 Autumn harvest',price:'£4.20',sub:'Roasted fig & honey with steamed oat milk.',caf:'40mg',cal:'190',pour:'9s',grad:['#9a6b8a','#6d4660'],cup:['#9a6b8a','#bb93ac','#e6d4df']},
+ 9:{name:'Pumpkin Spice Latte',badge:'🎃 Halloween',price:'£4.50',sub:'Real pumpkin, cinnamon & nutmeg — the autumn classic.',caf:'70mg',cal:'220',pour:'10s',grad:['#d07a28','#9c531a'],cup:['#c8732a','#e09a4f','#f3d3a0']},
+ 10:{name:'Maple Pecan Latte',badge:'🍁 Autumn limited',price:'£4.30',sub:'Toasted pecan & maple syrup — warm and nutty.',caf:'60mg',cal:'210',pour:'10s',grad:['#b0703a','#7c4a24'],cup:['#a86a3a','#c8945f','#ecd5b8']},
+ 11:{name:'Gingerbread Matcha',badge:'🎄 Christmas special',price:'£4.50',sub:'Spiced gingerbread matcha under a snow of oat foam.',caf:'80mg',cal:'200',pour:'9s',grad:['#3f6b22','#9c2b2b'],cup:['#5f8d3b','#86b85a','#e6cba0']},
+};
+function scaleCup(svg){return svg.replace('width="150" height="200"','width="128" height="170"');}
+function renderSeasonal(){
+  const s=SEASONAL[new Date().getMonth()];
+  DRINKS.seasonal={name:s.name,price:s.price,sub:s.sub,caf:s.caf,cal:s.cal,pour:s.pour,
+    grad:s.grad,tag:'ready in '+s.pour,tagc:'rgba(255,255,255,.95)',
+    cup:I.cupBig(s.cup[0],s.cup[1],s.cup[2])};
+  const card=document.getElementById('seasonal-card');
+  card.style.background='linear-gradient(135deg,'+s.grad[0]+','+s.grad[1]+')';
+  card.innerHTML=
+    '<div class="s-badge">'+s.badge+'</div>'+
+    '<div class="s-cup">'+scaleCup(I.cupBig(s.cup[0],s.cup[1],s.cup[2]))+'</div>'+
+    '<h3>'+s.name+'</h3>'+
+    '<p>'+s.sub+'</p>'+
+    '<div class="s-foot"><span class="s-price">'+s.price+'</span><span class="s-cta">Order now</span></div>';
+}
+
+/* ---------- points & rewards ---------- */
+let points=parseInt(localStorage.getItem('after_points')||'1250',10);
+const fmt=n=>n.toLocaleString('en-GB');
+function savePoints(){localStorage.setItem('after_points',points);}
+const REWARDS=[
+ {pts:350, icon:'🥤', t:'£1 off any drink',          c:'A little something on your next pour'},
+ {pts:600, icon:'✨', t:'Free flavour or milk upgrade',c:'Oat, syrup or an extra shot — on us'},
+ {pts:1000,icon:'☕', t:'Free drink, any tap',         c:'Matcha, coffee or protein'},
+ {pts:1800,icon:'🎁', t:'Free seasonal special',       c:'Whatever\'s on tap this month'},
+ {pts:3500,icon:'👑', t:'A week of free pours',        c:'7 days, unlimited drinks'},
+];
+function renderPoints(){
+  document.getElementById('home-points').textContent=fmt(points);
+  renderRewards();
+}
+function renderRewards(){
+  document.getElementById('rw-balance').textContent=fmt(points);
+  const next=REWARDS.find(r=>r.pts>points);
+  const bar=document.getElementById('rw-bar'), nx=document.getElementById('rw-next');
+  if(next){
+    const prev=[...REWARDS].reverse().find(r=>r.pts<=points);
+    const base=prev?prev.pts:0;
+    bar.style.width=Math.min(100,Math.round((points-base)/(next.pts-base)*100))+'%';
+    nx.textContent=fmt(next.pts-points)+' points until '+next.t.toLowerCase();
+  } else { bar.style.width='100%'; nx.textContent='Every reward unlocked — nice.'; }
+  const list=document.getElementById('rw-list'); list.innerHTML='';
+  REWARDS.forEach(r=>{
+    const on=points>=r.pts;
+    const el=document.createElement('div'); el.className='reward'+(on?'':' locked');
+    el.innerHTML='<div class="ri">'+r.icon+'</div>'+
+      '<div class="rinfo"><div class="rt">'+r.t+'</div><div class="rc">'+r.c+'</div></div>'+
+      (on?'<button class="rbtn" onclick="redeem('+r.pts+",'"+r.t.replace(/'/g,"\\'")+"'"+')">Redeem</button>'
+         :'<div class="rlock">'+fmt(r.pts)+'</div>');
+    list.appendChild(el);
+  });
+}
+function redeem(cost,name){
+  if(points<cost) return;
+  points-=cost; savePoints(); renderPoints();
+  toast('🎉 Redeemed: '+name+' — code added to your wallet');
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ---------- init ---------- */
+renderSeasonal();
+renderPoints();
+</script>
+</body>
+</html>

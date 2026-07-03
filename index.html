@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="After — premium self-service coffee, matcha and protein shakes, on tap. Six taps, poured in seconds, day or night. Bring a smart tap to your workplace." />
+<title>After — Coffee &amp; Matcha, On Tap</title>
+<link rel="icon" type="image/png" href="assets/logo-after.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<link rel="stylesheet" href="styles.css?v=5" />
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#top" class="brand" aria-label="After home">
+      <img src="assets/logo-after.png" alt="After" class="brand__logo" />
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#how">How it works</a>
+      <a href="#app">App</a>
+      <a href="#locations">Locations</a>
+      <a href="#membership">Membership</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="btn btn--ghost" data-open-quote>Get a quote</button>
+      <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile menu -->
+<div class="mobilemenu" id="mobilemenu" aria-hidden="true">
+  <a href="#about">About</a>
+  <a href="#how">How it works</a>
+  <a href="#app">App</a>
+  <a href="#locations">Locations</a>
+  <a href="#membership">Membership</a>
+  <button class="btn btn--solid" data-open-quote>Get a quote</button>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__grid">
+    <div class="hero__inner">
+      <p class="eyebrow reveal">Self-serve · Coffee · Matcha · Protein · Anytime</p>
+      <h1 class="hero__title reveal">
+        Fancy a
+        <span class="rotator" aria-label="coffee, matcha, or a shake">
+          <span class="rotator__word" id="rotatorDrink">coffee</span></span><br />after
+        <span class="rotator" aria-label="work, class, the gym, and everywhere else">
+          <span class="rotator__word" id="rotatorWord">work</span>
+        </span>
+      </h1>
+      <p class="hero__lede reveal">
+        A single, quietly beautiful machine. Six taps — coffee, matcha and protein
+        shakes, hot or cold. Poured in seconds, day or night, with no queue and no barista.
+      </p>
+      <div class="hero__cta reveal">
+        <button class="btn btn--solid btn--lg" data-open-quote>Get a quote</button>
+        <a href="#how" class="btn btn--line btn--lg">See how it works</a>
+      </div>
+
+      <div class="hero__stats reveal">
+        <div class="stat"><span class="stat__num">24/7</span><span class="stat__label">Always open</span></div>
+        <div class="stat"><span class="stat__num">~8s</span><span class="stat__label">Per pour</span></div>
+        <div class="stat"><span class="stat__num">6</span><span class="stat__label">Taps, one unit</span></div>
+      </div>
+    </div>
+
+    <div class="hero__media reveal" aria-hidden="true">
+      <div class="heroclip">
+        <video class="heroclip__video" src="assets/hero-clip.mp4" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <i></i>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>Coffee</span><span class="sep">✦</span>
+      <span>Matcha</span><span class="sep">✦</span>
+      <span>Protein</span><span class="sep">✦</span>
+      <span>Hot &amp; Cold</span><span class="sep">✦</span>
+      <span>Poured in Seconds</span><span class="sep">✦</span>
+      <span>Open After Hours</span><span class="sep">✦</span>
+      <span>Coffee</span><span class="sep">✦</span>
+      <span>Matcha</span><span class="sep">✦</span>
+      <span>Protein</span><span class="sep">✦</span>
+      <span>Hot &amp; Cold</span><span class="sep">✦</span>
+      <span>Poured in Seconds</span><span class="sep">✦</span>
+      <span>Open After Hours</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about section" id="about">
+    <div class="section__head reveal">
+      <span class="section__index">01 — About us</span>
+      <h2 class="section__title">
+        Made for the hours<br />when everything else is closed.
+      </h2>
+    </div>
+
+    <div class="about__grid">
+      <div class="about__lead reveal">
+        <p>
+          <strong>After</strong> began with a simple, familiar feeling — sitting somewhere
+          late, still working, wanting a proper coffee or matcha, and finding
+          nothing open but a tired vending machine.
+        </p>
+        <p>
+          So we built the alternative. A calm, self-service drinks system that pours
+          real coffee, real matcha and protein shakes — hot or cold — straight from six
+          taps. You order in the app, scan a QR code at the machine, place your cup, and
+          it fills in seconds. No staff. No waiting. No compromise on the cup.
+        </p>
+        <p>
+          Designed to sit beautifully in a workplace, a campus, a library or a
+          late-opening space, After is there at 9am and still there at 2am — quietly
+          doing one thing exceptionally well.
+        </p>
+      </div>
+
+      <div class="about__cards">
+        <div class="minicard reveal">
+          <span class="minicard__k">The ritual</span>
+          <p>Order, scan, pour. A few unhurried seconds from tap to cup.</p>
+        </div>
+        <div class="minicard reveal">
+          <span class="minicard__k">The craft</span>
+          <p>A concentrate system built for consistency — the same clean cup, every time.</p>
+        </div>
+        <div class="minicard reveal">
+          <span class="minicard__k">The place</span>
+          <p>One small, refined footprint. It runs itself, day and night.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="how section" id="how">
+    <div class="section__head reveal">
+      <span class="section__index">02 — How it works</span>
+      <h2 class="section__title">Three steps. Then you’re back to it.</h2>
+    </div>
+
+    <ol class="steps">
+      <li class="step reveal">
+        <span class="step__no">01</span>
+        <h3>Order in the app</h3>
+        <p>Choose your drink and pay in seconds. The app generates a QR code, ready before you reach the tap.</p>
+      </li>
+      <li class="step reveal">
+        <span class="step__no">02</span>
+        <h3>Scan &amp; place your cup</h3>
+        <p>Scan the code at the machine and set a cup beneath the tap. No buttons to guess at, no queue to join.</p>
+      </li>
+      <li class="step reveal">
+        <span class="step__no">03</span>
+        <h3>Watch it pour</h3>
+        <p>Coffee, matcha or a protein shake, hot or cold, filled in seconds. Take it and get back to whatever matters.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ VIDEO SHOWCASE ============ -->
+  <section class="showcase section">
+    <div class="showcase__head reveal">
+      <span class="section__index">In the wild</span>
+      <h2 class="section__title">The tap, in real life.</h2>
+      <p class="section__sub">A quiet row of six taps on the counter — coffee, matcha and protein, ready to pour.</p>
+    </div>
+
+    <figure class="showcase__media reveal">
+      <video class="showcase__video" autoplay muted loop playsinline preload="metadata" poster="assets/after-poster.jpg">
+        <source src="assets/after-demo.mp4" type="video/mp4" />
+      </video>
+      <button class="showcase__sound" id="soundToggle" aria-pressed="false">
+        <span class="showcase__sound-ico" aria-hidden="true">♪</span>
+        <span class="showcase__sound-txt">Sound on</span>
+      </button>
+    </figure>
+  </section>
+
+  <!-- ============ PRODUCT / TAP ============ -->
+  <section class="product section">
+    <div class="product__grid">
+      <div class="product__visual reveal" aria-hidden="true">
+        <div class="tapcard">
+          <div class="tapcard__top">
+            <span>after</span>
+            <span class="tapcard__live">● live</span>
+          </div>
+          <div class="taps taps--six">
+            <div class="tap">
+              <span class="tap__label">Coffee<em>Hot</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+            <div class="tap tap--matcha">
+              <span class="tap__label">Matcha<em>Hot</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+            <div class="tap tap--protein">
+              <span class="tap__label">Protein<em>Shake</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+            <div class="tap tap--cold">
+              <span class="tap__label">Coffee<em>Cold</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+            <div class="tap tap--matcha tap--cold">
+              <span class="tap__label">Matcha<em>Cold</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+            <div class="tap tap--protein">
+              <span class="tap__label">Protein<em>Shake</em></span>
+              <div class="tap__spout"></div>
+              <div class="tap__stream"></div>
+              <div class="tap__cup"></div>
+            </div>
+          </div>
+          <div class="tapcard__foot">
+            <span>2 Hot</span><span>·</span><span>2 Cold</span><span>·</span><span>2 Protein</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="product__copy">
+        <div class="section__head reveal">
+          <span class="section__index">03 — The machine</span>
+          <h2 class="section__title">One quiet unit.<br />A whole café’s worth of good.</h2>
+        </div>
+        <ul class="featurelist">
+          <li class="reveal"><strong>Six-tap system</strong><span>Coffee, matcha and protein shakes — two hot, two cold, two protein.</span></li>
+          <li class="reveal"><strong>App + QR ordering</strong><span>Pay ahead, scan, pour. The line disappears.</span></li>
+          <li class="reveal"><strong>Consistent by design</strong><span>Concentrate-based drinks mean the same quality every cup.</span></li>
+          <li class="reveal"><strong>Fully automated</strong><span>Runs around the clock — only restocking and cleaning needed.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APP DEMO ============ -->
+  <section class="appdemo section" id="app">
+    <div class="appdemo__grid">
+      <div class="appdemo__copy">
+        <div class="section__head reveal">
+          <span class="section__index">Preview the app</span>
+          <h2 class="section__title">Order before<br />you even stand up.</h2>
+        </div>
+        <p class="appdemo__lede reveal">
+          This is the real After app — live and fully interactive. Tap through it:
+          browse the menu, build an order, and grab the QR code that pours your drink.
+        </p>
+        <ul class="appdemo__list">
+          <li class="reveal"><strong>Browse &amp; order</strong><span>Coffee, matcha and protein, made your way.</span></li>
+          <li class="reveal"><strong>Instant QR</strong><span>A code that pours the moment you scan it.</span></li>
+          <li class="reveal"><strong>Membership</strong><span>Your unlimited plan and regulars, in one place.</span></li>
+        </ul>
+        <div class="appdemo__cta reveal">
+          <button class="btn btn--solid btn--lg" data-open-quote>Bring the app to your team</button>
+        </div>
+      </div>
+
+      <div class="appdemo__phone reveal">
+        <div class="appshell">
+          <div class="appshell__screen">
+            <iframe class="appshell__frame" src="after-mvp.html" title="After app — interactive demo" loading="lazy"></iframe>
+          </div>
+          <span class="appshell__side appshell__side--power" aria-hidden="true"></span>
+          <span class="appshell__side appshell__side--vol1" aria-hidden="true"></span>
+          <span class="appshell__side appshell__side--vol2" aria-hidden="true"></span>
+        </div>
+        <span class="appdemo__hint">Live demo — tap to explore</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOCATIONS / MAP ============ -->
+  <section class="locations section" id="locations">
+    <div class="section__head reveal">
+      <span class="section__index">04 — Locations</span>
+      <h2 class="section__title">Find a tap near you.</h2>
+      <p class="section__sub">Live and coming-soon After taps across campuses and workplaces. More arriving each month.</p>
+    </div>
+
+    <div class="locator">
+      <aside class="locator__list" id="locatorList" aria-label="Location list">
+        <!-- populated by JS -->
+      </aside>
+      <div class="locator__map">
+        <div id="map" role="application" aria-label="Map of After locations"></div>
+        <div class="locator__hint">Don’t see one nearby? <button class="linkbtn" data-open-quote>Request a tap →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEMBERSHIP ============ -->
+  <section class="membership section" id="membership">
+    <div class="section__head reveal">
+      <span class="section__index">05 — Membership</span>
+      <h2 class="section__title">Two ways to drink well.</h2>
+    </div>
+
+    <div class="plans">
+      <div class="plan reveal">
+        <span class="plan__tag">Pay as you go</span>
+        <div class="plan__price"><span class="plan__from">from</span> £2.00</div>
+        <p class="plan__desc">One drink, one tap. Order in the app whenever the moment calls for it.</p>
+        <ul class="plan__list">
+          <li>Coffee from £2.00</li>
+          <li>Matcha from £2.50</li>
+          <li>Protein shakes, ice-cold</li>
+          <li>Hot or cold, any hour</li>
+        </ul>
+        <button class="btn btn--line btn--full" data-open-quote>Bring it to us</button>
+      </div>
+
+      <div class="plan plan--feature reveal">
+        <span class="plan__tag">Membership</span>
+        <div class="plan__price">£25.99<span class="plan__per">/month</span></div>
+        <p class="plan__desc">Unlimited pours for the regulars. The everyday ritual, sorted.</p>
+        <ul class="plan__list">
+          <li>Unlimited coffee, matcha &amp; protein</li>
+          <li>Priority app ordering</li>
+          <li>Cancel anytime</li>
+        </ul>
+        <button class="btn btn--solid btn--full" data-open-quote>Enquire for your team</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE CTA ============ -->
+  <section class="cta section" id="quote">
+    <div class="cta__inner reveal">
+      <span class="section__index">06 — Get a quote</span>
+      <h2 class="cta__title">Bring an After tap to your office.</h2>
+      <p class="cta__lede">
+        Tell us about your space and your people. We’ll design the right setup,
+        handle installation, and keep it stocked — you just enjoy the coffee.
+      </p>
+      <button class="btn btn--solid btn--lg" data-open-quote>Request your quote</button>
+      <p class="cta__fine">No obligation · Response within 2 business days</p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo-after.png" alt="After" class="footer__logo" />
+        <p>Coffee &amp; matcha, on tap. For the hours that matter.</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <span class="footer__k">Explore</span>
+          <a href="#about">About</a>
+          <a href="#how">How it works</a>
+          <a href="#locations">Locations</a>
+          <a href="#membership">Membership</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__k">Business</span>
+          <button class="linkbtn" data-open-quote>Get a quote</button>
+          <a href="mailto:feyzagulturkerr@gmail.com">Partnerships</a>
+          <a href="mailto:feyzagulturkerr@gmail.com">Careers</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__k">Contact</span>
+          <a href="mailto:feyzagulturkerr@gmail.com">feyzagulturkerr@gmail.com</a>
+          <span class="footer__muted">London, United Kingdom</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© <span id="year"></span> After. All rights reserved.</span>
+      <span>Made for the after hours.</span>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ============ QUOTE MODAL ============ -->
+<div class="modal" id="quoteModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal__overlay" data-close-quote></div>
+  <div class="modal__panel" role="document">
+    <button class="modal__close" data-close-quote aria-label="Close">&times;</button>
+
+    <div class="modal__body" id="quoteFormWrap">
+      <span class="section__index">Get a quote</span>
+      <h3 class="modal__title" id="quoteTitle">Let’s put a tap in your space.</h3>
+      <p class="modal__sub">A few details and we’ll come back with a tailored proposal.</p>
+
+      <form class="qform" id="quoteForm" novalidate>
+        <div class="field">
+          <label for="q_name">Your name</label>
+          <input id="q_name" name="name" type="text" autocomplete="name" required placeholder="Alex Morgan" />
+        </div>
+        <div class="field">
+          <label for="q_company">Company / organisation</label>
+          <input id="q_company" name="company" type="text" autocomplete="organization" required placeholder="Studio Nord Ltd" />
+        </div>
+        <div class="field">
+          <label for="q_email">Work email</label>
+          <input id="q_email" name="email" type="email" autocomplete="email" required placeholder="alex@company.com" />
+        </div>
+        <div class="field">
+          <label for="q_type">Type of space</label>
+          <select id="q_type" name="spaceType" required>
+            <option value="" disabled selected>Choose one…</option>
+            <option>Office / Workplace</option>
+            <option>University campus</option>
+            <option>Library / Study space</option>
+            <option>Hospital</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="q_location">Location (city)</label>
+          <input id="q_location" name="location" type="text" required placeholder="London" />
+        </div>
+        <div class="field">
+          <label for="q_people">People on site</label>
+          <select id="q_people" name="people">
+            <option value="" disabled selected>Approx. headcount…</option>
+            <option>Under 50</option>
+            <option>50 – 200</option>
+            <option>200 – 500</option>
+            <option>500+</option>
+          </select>
+        </div>
+        <div class="field field--full">
+          <label for="q_notes">Anything else? <span class="opt">(optional)</span></label>
+          <textarea id="q_notes" name="notes" rows="3" placeholder="Where it’d go, hours you’re open, coffee / matcha / protein lovers…"></textarea>
+        </div>
+
+        <div class="qform__foot field--full">
+          <button type="submit" class="btn btn--solid btn--lg btn--full">Send request</button>
+          <p class="qform__fine">By sending, you agree to be contacted about your enquiry.</p>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__success" id="quoteSuccess" hidden>
+      <div class="tick" aria-hidden="true">✓</div>
+      <h3 class="modal__title">Request on its way.</h3>
+      <p class="modal__sub" id="successMsg">Thank you — we’ll be in touch within two business days.</p>
+      <button class="btn btn--line" data-close-quote>Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="script.js?v=3"></script>
+</body>
+</html>
