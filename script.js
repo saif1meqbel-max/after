@@ -36,6 +36,57 @@
     spin("rotatorWord", ["work", "class", "the gym", "lectures", "hours"], 2600);
   })();
 
+  /* ---------- mobile video autoplay (no manual play) ---------- */
+  (function mobileVideoAutoplay() {
+    var mq = window.matchMedia("(max-width: 940px)");
+    if (!mq.matches) return;
+
+    var videos = document.querySelectorAll("video");
+
+    function primeVideo(vid) {
+      vid.muted = true;
+      vid.defaultMuted = true;
+      vid.setAttribute("muted", "");
+      vid.setAttribute("playsinline", "");
+      vid.setAttribute("webkit-playsinline", "");
+      vid.playsInline = true;
+      vid.autoplay = true;
+      vid.loop = true;
+      vid.removeAttribute("controls");
+      vid.preload = "auto";
+      vid.removeAttribute("poster");
+    }
+
+    function playVideo(vid) {
+      if (!vid) return;
+      primeVideo(vid);
+      var attempt = vid.play();
+      if (attempt && attempt.catch) {
+        attempt.catch(function () { /* retry on next event */ });
+      }
+    }
+
+    videos.forEach(function (vid) {
+      playVideo(vid);
+      ["loadeddata", "canplay", "loadedmetadata"].forEach(function (evt) {
+        vid.addEventListener(evt, function () { playVideo(vid); }, { passive: true });
+      });
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) playVideo(e.target);
+          });
+        }, { threshold: 0.08 });
+        io.observe(vid);
+      }
+    });
+
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) videos.forEach(playVideo);
+    });
+    window.addEventListener("pageshow", function () { videos.forEach(playVideo); });
+  })();
+
   /* ---------- showcase video sound toggle ---------- */
   (function videoSound() {
     var btn = document.getElementById("soundToggle");

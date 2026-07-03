@@ -601,6 +601,14 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .locitem{ min-width:230px; border-bottom:none; border-right:1px solid var(--line); }
   .plans{ grid-template-columns:1fr; }
   .footer__inner{ grid-template-columns:1fr; }
+
+  /* force autoplay — hide native play overlays on mobile */
+  video{
+    pointer-events:none;
+    -webkit-touch-callout:none;
+  }
+  video::-webkit-media-controls{ display:none !important; }
+  video::-webkit-media-controls-start-playback-button{ display:none !important; -webkit-appearance:none; }
 }
 @media (max-width:560px){
   .qform{ grid-template-columns:1fr; }
