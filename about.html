@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="About After — premium self-service coffee, matcha and protein shakes, on tap day and night." />
+<title>About Us — After</title>
+<link rel="icon" type="image/png" href="assets/logo-after.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css?v=11" />
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav is-scrolled" id="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand" aria-label="After home">
+      <img src="assets/logo-after.png" alt="After" class="brand__logo" />
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="about.html" aria-current="page">About</a>
+      <a href="index.html#how">How it works</a>
+      <a href="index.html#app">App</a>
+      <a href="index.html#locations">Locations</a>
+      <a href="index.html#membership">Membership</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="btn btn--ghost" data-open-quote>Get a quote</button>
+      <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobilemenu" id="mobilemenu" aria-hidden="true">
+  <a href="about.html">About</a>
+  <a href="index.html#how">How it works</a>
+  <a href="app.html">App</a>
+  <a href="index.html#locations">Locations</a>
+  <a href="index.html#membership">Membership</a>
+  <button class="btn btn--solid" data-open-quote>Get a quote</button>
+</div>
+
+<main id="top" class="subpage">
+
+  <section class="about section">
+    <div class="section__head reveal">
+      <span class="section__index">About us</span>
+      <h1 class="section__title">
+        Made for the hours<br />when everything else is closed.
+      </h1>
+    </div>
+
+    <div class="about__grid">
+      <div class="about__lead reveal">
+        <p>
+          <strong>After</strong> began with a simple, familiar feeling — sitting somewhere
+          late, still working, wanting a proper coffee or matcha, and finding
+          nothing open but a tired vending machine.
+        </p>
+        <p>
+          So we built the alternative. A calm, self-service drinks system that pours
+          real coffee, real matcha and protein shakes — hot or cold — straight from six
+          taps. You order in the app, scan a QR code at the machine, place your cup, and
+          it fills in seconds. No staff. No waiting. No compromise on the cup.
+        </p>
+        <p>
+          Designed to sit beautifully in a workplace, a campus, a library or a
+          late-opening space, After is there at 9am and still there at 2am — quietly
+          doing one thing exceptionally well.
+        </p>
+      </div>
+
+      <div class="about__cards">
+        <div class="minicard reveal">
+          <span class="minicard__k">The ritual</span>
+          <p>Order, scan, pour. A few unhurried seconds from tap to cup.</p>
+        </div>
+        <div class="minicard reveal">
+          <span class="minicard__k">The craft</span>
+          <p>A concentrate system built for consistency — the same clean cup, every time.</p>
+        </div>
+        <div class="minicard reveal">
+          <span class="minicard__k">The place</span>
+          <p>One small, refined footprint. It runs itself, day and night.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="subpage__cta reveal">
+      <a href="index.html#how" class="btn btn--line btn--lg">See how it works</a>
+      <button class="btn btn--solid btn--lg" data-open-quote>Get a quote</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo-after.png" alt="After" class="footer__logo" />
+        <p>Coffee &amp; matcha, on tap. For the hours that matter.</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <span class="footer__k">Explore</span>
+          <a href="about.html">About</a>
+          <a href="index.html#how">How it works</a>
+          <a href="index.html#locations">Locations</a>
+          <a href="index.html#membership">Membership</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__k">Business</span>
+          <button class="linkbtn" data-open-quote>Get a quote</button>
+          <a href="mailto:feyzagulturkerr@gmail.com">Partnerships</a>
+          <a href="mailto:feyzagulturkerr@gmail.com">Careers</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__k">Contact</span>
+          <a href="mailto:feyzagulturkerr@gmail.com">feyzagulturkerr@gmail.com</a>
+          <span class="footer__muted">London, United Kingdom</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© <span id="year"></span> After. All rights reserved.</span>
+      <span>Made for the after hours.</span>
+    </div>
+  </footer>
+
+</main>
+
+<div class="modal" id="quoteModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal__overlay" data-close-quote></div>
+  <div class="modal__panel" role="document">
+    <button class="modal__close" data-close-quote aria-label="Close">&times;</button>
+
+    <div class="modal__body" id="quoteFormWrap">
+      <span class="section__index">Get a quote</span>
+      <h2 class="modal__title" id="quoteTitle">Bring After to your space.</h2>
+      <p class="modal__sub">Tell us about your space and your people. We’ll design the right setup and reply within two business days.</p>
+
+      <form class="qform" id="quoteForm">
+        <div class="field">
+          <label for="q_name">Your name</label>
+          <input id="q_name" name="name" type="text" required placeholder="Alex Morgan" />
+        </div>
+        <div class="field">
+          <label for="q_email">Work email</label>
+          <input id="q_email" name="email" type="email" required placeholder="alex@company.com" />
+        </div>
+        <div class="field">
+          <label for="q_company">Company / venue</label>
+          <input id="q_company" name="company" type="text" required placeholder="Acme Ltd" />
+        </div>
+        <div class="field">
+          <label for="q_type">Space type</label>
+          <select id="q_type" name="spaceType" required>
+            <option value="" disabled selected>Select…</option>
+            <option>Office / workplace</option>
+            <option>University / campus</option>
+            <option>Gym / fitness</option>
+            <option>Co-working</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="q_location">Location (city)</label>
+          <input id="q_location" name="location" type="text" required placeholder="London" />
+        </div>
+        <div class="field">
+          <label for="q_people">People on site</label>
+          <select id="q_people" name="people">
+            <option value="" disabled selected>Approx. headcount…</option>
+            <option>Under 50</option>
+            <option>50 – 200</option>
+            <option>200 – 500</option>
+            <option>500+</option>
+          </select>
+        </div>
+        <div class="field field--full">
+          <label for="q_notes">Anything else? <span class="opt">(optional)</span></label>
+          <textarea id="q_notes" name="notes" rows="3" placeholder="Where it’d go, hours you’re open, coffee / matcha / protein lovers…"></textarea>
+        </div>
+
+        <div class="qform__foot field--full">
+          <button type="submit" class="btn btn--solid btn--lg btn--full">Send request</button>
+          <p class="qform__fine">By sending, you agree to be contacted about your enquiry.</p>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__success" id="quoteSuccess" hidden>
+      <div class="tick" aria-hidden="true">✓</div>
+      <h3 class="modal__title">Request on its way.</h3>
+      <p class="modal__sub" id="successMsg">Thank you — we’ll be in touch within two business days.</p>
+      <button class="btn btn--line" data-close-quote>Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js?v=6"></script>
+</body>
+</html>

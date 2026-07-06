@@ -152,6 +152,7 @@
   var lastFocused = null;
 
   function openQuote() {
+    if (!modal) return;
     lastFocused = document.activeElement;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
@@ -164,6 +165,7 @@
     if (first) setTimeout(function () { first.focus(); }, 60);
   }
   function closeQuote() {
+    if (!modal) return;
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
@@ -181,7 +183,7 @@
   });
 
   /* ---------- form submit ---------- */
-  form.addEventListener("submit", function (e) {
+  if (form) form.addEventListener("submit", function (e) {
     e.preventDefault();
     var valid = true;
     form.querySelectorAll("[required]").forEach(function (field) {
@@ -237,8 +239,7 @@
     try { window.location.href = mailto; } catch (err) { /* no-op */ }
   });
 
-  // clear invalid state as the user types
-  form.querySelectorAll("input, select, textarea").forEach(function (f) {
+  if (form) form.querySelectorAll("input, select, textarea").forEach(function (f) {
     f.addEventListener("input", function () {
       var wrap = f.closest(".field");
       if (wrap) wrap.classList.remove("is-invalid");
@@ -282,6 +283,7 @@
   }
 
   function buildList() {
+    if (!listEl) return;
     LOCATIONS.forEach(function (loc, i) {
       var btn = document.createElement("button");
       btn.className = "locitem";
