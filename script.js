@@ -34,6 +34,7 @@
 
     spin("rotatorDrink", ["coffee", "matcha", "shake"], 2200);
     spin("rotatorWord", ["work", "class", "the gym", "lectures", "hours"], 2600);
+    spin("rotatorPlace", ["school", "university", "gym", "library", "office", "workspace"], 2400);
   })();
 
   /* ---------- mobile video autoplay (no manual play) ---------- */
