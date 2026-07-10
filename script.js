@@ -251,10 +251,10 @@
      LOCATOR MAP (Leaflet)
      ============================================================ */
   var LOCATIONS = [
-    { name: "Middlesex University", area: "Hendon, London", type: "Campus", status: "live", lat: 51.5898, lng: -0.2296 },
-    { name: "University College London", area: "Bloomsbury, London", type: "Library", status: "live", lat: 51.5246, lng: -0.1340 },
-    { name: "King’s College London", area: "Strand, London", type: "Campus", status: "live", lat: 51.5115, lng: -0.1160 },
-    { name: "Canary Wharf Tower", area: "Canary Wharf, London", type: "Office", status: "live", lat: 51.5054, lng: -0.0235 },
+    { name: "Middlesex University", area: "Hendon, London", type: "Campus", status: "soon", lat: 51.5898, lng: -0.2296 },
+    { name: "University College London", area: "Bloomsbury, London", type: "Library", status: "soon", lat: 51.5246, lng: -0.1340 },
+    { name: "King’s College London", area: "Strand, London", type: "Campus", status: "soon", lat: 51.5115, lng: -0.1160 },
+    { name: "Canary Wharf Tower", area: "Canary Wharf, London", type: "Office", status: "soon", lat: 51.5054, lng: -0.0235 },
     { name: "Shoreditch Works", area: "Shoreditch, London", type: "Office", status: "soon", lat: 51.5264, lng: -0.0776 },
     { name: "Imperial College", area: "South Kensington, London", type: "Campus", status: "soon", lat: 51.4988, lng: -0.1749 },
     { name: "The British Library", area: "St Pancras, London", type: "Library", status: "soon", lat: 51.5299, lng: -0.1276 }
